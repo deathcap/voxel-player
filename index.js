@@ -47,7 +47,21 @@ module.exports = function (game) {
             else if (type === 'third' || type === 3) {
                 pov = 3;
             }
+
+            // don't show player in first person mode, gets in the way when you look down
+            this.show(pov !== 1);
+
             physics.possess();
+        };
+
+        physics.show = function (show) {
+            // TODO: change visibility of entire skin model all at once instead of individual meshes
+            this.playerSkin.rightArm.visible = show;
+            this.playerSkin.leftArm.visible = show;
+            this.playerSkin.body.visible = show;
+            this.playerSkin.rightLeg.visible = show;
+            this.playerSkin.leftLeg.visible = show;
+            this.playerSkin.head.visible = show;
         };
         
         physics.toggle = function () {
