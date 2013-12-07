@@ -1,15 +1,18 @@
 var skin = require('minecraft-skin');
 
-module.exports = function (game) {
-    var mountPoint;
-    var possessed;
-    
-    return function (img, skinOpts) {
-        if (!skinOpts) {
-          skinOpts = {};
-        }
-        skinOpts.scale = skinOpts.scale || new game.THREE.Vector3(0.04, 0.04, 0.04);
-        var playerSkin = skin(game.THREE, img, skinOpts);
+module.exports = function (game, opts) {
+    return new Player(game, opts);
+};
+
+function Player(game, opts) {
+        var mountPoint;
+        var possessed;
+       
+        opts = opts || {};
+        opts.skinOpts = opts.skinOpts || {};
+        opts.skinOpts.scale = opts.skinOpts.scale || new game.THREE.Vector3(0.04, 0.04, 0.04);
+
+        var playerSkin = skin(game.THREE, opts.image, opts.skinOpts);
         var player = playerSkin.mesh;
         var physics = game.makePhysical(player);
         physics.playerSkin = playerSkin;
@@ -78,7 +81,6 @@ module.exports = function (game) {
         physics.position = physics.yaw.position;
         
         return physics;
-    }
 };
 
 function parseXYZ (x, y, z) {
