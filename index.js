@@ -9,6 +9,8 @@ function Player(game, opts) {
         var possessed;
        
         opts = opts || {};
+        opts.homePosition = opts.homePosition || [0, 0, 0];
+        opts.homeRotation = opts.homeRotation || [0, 0, 0];
         opts.skinOpts = opts.skinOpts || {};
         opts.skinOpts.scale = opts.skinOpts.scale || new game.THREE.Vector3(0.04, 0.04, 0.04);
 
@@ -76,13 +78,19 @@ function Player(game, opts) {
 
             // don't show player in first person mode, gets in the way when you look down
             this.show(pov !== 1);
+            this.home();
         };
-        
-        physics.enable = function() {
+       
+        physics.home = function () {
+            this.position.set(opts.homePosition[0], opts.homePosition[1], opts.homePosition[2]); // TODO: figure out .apply()
+            this.rotation.set(opts.homeRotation[0], opts.homeRotation[1], opts.homeRotation[2]);
+        };
+
+        physics.enable = function () {
             physics.possess();
         };
 
-        physics.disable = function() {
+        physics.disable = function () {
             if (possessed) possessed.remove(game.camera); // TODO: fix
         };
         
@@ -93,11 +101,11 @@ function Player(game, opts) {
         return physics;
 };
 
-Player.prototype.enable = function() {
+Player.prototype.enable = function () {
     this.physics.enable();
 };
 
-Player.prototype.disable = function() {
+Player.prototype.disable = function () {
     this.physics.disable();
 };
 
