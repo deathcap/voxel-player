@@ -14,7 +14,7 @@ function Player(game, opts) {
 
         var playerSkin = skin(game.THREE, opts.image, opts.skinOpts);
         var player = playerSkin.mesh;
-        var physics = game.makePhysical(player);
+        var physics = this.physics = game.makePhysical(player);
         physics.playerSkin = playerSkin;
         
         player.position.set(0, 562, -20);
@@ -51,9 +51,6 @@ function Player(game, opts) {
                 pov = 3;
             }
 
-            // don't show player in first person mode, gets in the way when you look down
-            this.show(pov !== 1);
-
             physics.possess();
         };
 
@@ -76,11 +73,32 @@ function Player(game, opts) {
             var key = pov === 1 ? 'cameraInside' : 'cameraOutside';
             player[key].add(game.camera);
             possessed = player[key];
+
+            // don't show player in first person mode, gets in the way when you look down
+            this.show(pov !== 1);
+        };
+        
+        physics.enable = function() {
+            physics.possess();
+        };
+
+        physics.disable = function() {
+            if (possessed) possessed.remove(game.camera); // TODO: fix
         };
         
         physics.position = physics.yaw.position;
-        
+
+        this.enable();
+
         return physics;
+};
+
+Player.prototype.enable = function() {
+    this.physics.enable();
+};
+
+Player.prototype.disable = function() {
+    this.physics.disable();
 };
 
 function parseXYZ (x, y, z) {
