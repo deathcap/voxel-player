@@ -5,6 +5,8 @@ module.exports = function (game, opts) {
 };
 
 function Player(game, opts) {
+        if (!game.isClient) return;
+
         var mountPoint;
         var possessed;
        
