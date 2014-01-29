@@ -74,13 +74,13 @@ function Player(game, opts) {
         
         physics.possess = function () {
             if (possessed) possessed.remove(game.camera);
+            else this.home();
             var key = pov === 1 ? 'cameraInside' : 'cameraOutside';
             player[key].add(game.camera);
             possessed = player[key];
 
             // don't show player in first person mode, gets in the way when you look down
             this.show(pov !== 1);
-            this.home();
         };
        
         physics.home = function () {
