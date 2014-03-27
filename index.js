@@ -5,6 +5,7 @@ module.exports = function (game, opts) {
 };
 
 function Player(game, opts) {
+        this.game = game;
         if (!game.isClient) return;
 
         var mountPoint;
@@ -105,10 +106,22 @@ function Player(game, opts) {
 
 Player.prototype.enable = function () {
     this.physics.enable();
+
+    var physics = this.physics;
+
+    if (this.game.buttons.down) {
+      this.game.buttons.down.on('pov', this.onPov = function() { physics.toggle(); });
+      this.game.buttons.down.on('home', this.onHome = function() { physics.home(); });
+    }
 };
 
 Player.prototype.disable = function () {
     this.physics.disable();
+
+    if (this.game.buttons.down) {
+      this.game.buttons.down.removeListener('pov', this.onPov);
+      this.game.buttons.down.removeListener('home', this.onHome);
+    }
 };
 
 function parseXYZ (x, y, z) {
