@@ -4,7 +4,7 @@
     "description": "create a skinnable player with physics enabled",
     "main": "index.js",
     "dependencies": {
-        "minecraft-skin": "~0.1.0"
+        "minecraft-skin": "git://github.com/deathcap/minecraft-skin.git#29849de5a639f44b045a84fec028f6585b52d431"
     },
     "devDependencies": {
         "voxel": "~0.1.3",
