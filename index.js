@@ -3,10 +3,14 @@ var skin = require('minecraft-skin');
 module.exports = function (game, opts) {
     return new Player(game, opts);
 };
+module.exports.pluginInfo = {
+  loadAfter: ['voxel-keys']
+};
 
 function Player(game, opts) {
         this.game = game;
         if (!game.isClient) return;
+        this.keys = game.plugins.get('voxel-keys'); // optional
 
         var mountPoint;
         var possessed;
@@ -109,18 +113,18 @@ Player.prototype.enable = function () {
 
     var physics = this.physics;
 
-    if (this.game.buttons.down) {
-      this.game.buttons.down.on('pov', this.onPov = function() { physics.toggle(); });
-      this.game.buttons.down.on('home', this.onHome = function() { physics.home(); });
+    if (this.keys) {
+      this.keys.down.on('pov', this.onPov = function() { physics.toggle(); });
+      this.keys.down.on('home', this.onHome = function() { physics.home(); });
     }
 };
 
 Player.prototype.disable = function () {
     this.physics.disable();
 
-    if (this.game.buttons.down) {
-      this.game.buttons.down.removeListener('pov', this.onPov);
-      this.game.buttons.down.removeListener('home', this.onHome);
+    if (this.keys) {
+      this.keys.down.removeListener('pov', this.onPov);
+      this.keys.removeListener('home', this.onHome);
     }
 };
 
